@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>electric-bill-api.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h2 id="transbnk-electricity-bill-api">TransBnk Electricity Bill API</h2>
+<p><strong>Version:</strong> 1.0<br>
+<strong>Release Date:</strong> 13-May-2024</p>
+<hr>
+<h2 id="2-overview">2. Overview</h2>
+<h3 id="brief-description-of-what-the-api-does">Brief Description of What the API Does</h3>
+<p>The <strong>TransBnk Electricity Bill API</strong> provides functionality for retrieving electricity bill details for customers. It includes two main components:</p>
+<ol>
+<li>
+<p><strong>Operator Code Fetch API</strong></p>
+<ul>
+<li>Retrieves operator codes corresponding to states.</li>
+<li>These codes are required to identify the correct electricity provider before fetching bill details.</li>
+</ul>
+</li>
+<li>
+<p><strong>Electricity Bill API</strong></p>
+<ul>
+<li>Fetches detailed electricity bill information such as:
+<ul>
+<li>Customer Name</li>
+<li>State</li>
+<li>Address</li>
+<li>Mobile</li>
+<li>Email</li>
+<li>Bill Amount</li>
+<li>Bill Number</li>
+<li>Document Link</li>
+</ul>
+</li>
+<li>Requires the customer’s <strong>CA number</strong> and <strong>operator code</strong> as input.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="use-cases-and-benefits">Use Cases and Benefits</h3>
+<h4 id="use-cases">Use Cases</h4>
+<ul>
+<li><strong>Utility Bill Payment Platforms</strong>: Automate bill fetching for payment processing.</li>
+<li><strong>Banking Applications</strong>: Allow customers to view and pay electricity bills directly.</li>
+<li><strong>Fintech Solutions</strong>: Aggregate bills from multiple states and operators.</li>
+<li><strong>Customer Service Portals</strong>: Enable support teams to verify and assist with bill details.</li>
+</ul>
+<h4 id="benefits">Benefits</h4>
+<ul>
+<li><strong>Automation</strong>: Reduces manual entry and errors.</li>
+<li><strong>Real-Time Data</strong>: Ensures up-to-date bill information for faster processing.</li>
+<li><strong>Scalability</strong>: Supports multiple states and operators for nationwide coverage.</li>
+<li><strong>Security</strong>: API key authentication and IP whitelisting for secure access.</li>
+<li><strong>Enhanced Customer Experience</strong>: Simplifies bill payment workflows through integration.</li>
+</ul>
+<hr>
+<h2 id="3-base-urls">3. Base URLs</h2>
+<h3 id="uat--sandbox-environment">UAT / Sandbox Environment</h3>
+<ul>
+<li>
+<p><strong>Operator Code Fetch API</strong>:<br>
+<code>https://sandbox-api.trusthub.in/electricity-operator-code</code></p>
+</li>
+<li>
+<p><strong>Electricity Bill API</strong>:<br>
+<code>https://sandbox-api.trusthub.in/electricity-bill</code></p>
+</li>
+</ul>
+<hr>
+<h3 id="production-environment">Production Environment</h3>
+<ul>
+<li>
+<p><strong>Operator Code Fetch API</strong>:<br>
+<code>https://api.trusthub.in/electricity-operator-code</code></p>
+</li>
+<li>
+<p><strong>Electricity Bill API</strong>:<br>
+<code>https://api.trusthub.in/electricity-bill</code></p>
+</li>
+</ul>
+<hr>
+<h2 id="4-authentication--security">4. Authentication &amp; Security</h2>
+<h3 id="api-key-details">API Key Details</h3>
+<ul>
+<li><strong>Authentication Method</strong>: API Key</li>
+<li><strong>Header Parameter</strong>:<br>
+<code>x-api-key: [API key provided by TransBnk after activation and IP whitelisting]</code></li>
+</ul>
+<hr>
+<h3 id="required-headers">Required Headers</h3>
+<ul>
+<li><code>Authorization</code>: API Key in header (<code>x-api-key</code>)</li>
+<li><code>Content-Type</code>:<br>
+<code>application/json; charset=utf-8</code></li>
+</ul>
+<hr>
+<h3 id="security-measures">Security Measures</h3>
+<ul>
+<li><strong>IP Whitelisting</strong>:<br>
+Access to the API is restricted to whitelisted IP addresses only.</li>
+<li><strong>API Key Validation</strong>:<br>
+Requests without a valid API key will return:<pre class="hljs"><code><div>{ <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Forbidden"</span> }
+
+
+
+
+</div></code></pre>
+</li>
+</ul>
+<h2 id="5-rate-limits--quotas">5. Rate Limits &amp; Quotas</h2>
+<h3 id="requests-per-minutehour">Requests per Minute/Hour</h3>
+<ul>
+<li><strong>Not specified in the current API documentation.</strong></li>
+</ul>
+<h3 id="throttling-behavior">Throttling Behavior</h3>
+<ul>
+<li><strong>Not mentioned in the provided specification.</strong></li>
+<li>It is recommended to confirm with TransBnk support for any applicable rate limits or throttling policies.</li>
+</ul>
+<hr>
+<h2 id="6-request-structure">6. Request Structure</h2>
+<h3 id="http-methods">HTTP Methods</h3>
+<ul>
+<li><strong>Operator Code Fetch API</strong>: <code>GET</code></li>
+<li><strong>Electricity Bill API</strong>: <code>POST</code></li>
+</ul>
+<hr>
+<h3 id="endpoint-urls">Endpoint URLs</h3>
+<h4 id="uat--sandbox">UAT / Sandbox:</h4>
+<ul>
+<li><strong>Operator Code Fetch</strong>:<br>
+<code>https://sandbox-api.trusthub.in/electricity-operator-code</code></li>
+<li><strong>Electricity Bill</strong>:<br>
+<code>https://sandbox-api.trusthub.in/electricity-bill</code></li>
+</ul>
+<h4 id="production">Production:</h4>
+<ul>
+<li><strong>Operator Code Fetch</strong>:<br>
+<code>https://api.trusthub.in/electricity-operator-code</code></li>
+<li><strong>Electricity Bill</strong>:<br>
+<code>https://api.trusthub.in/electricity-bill</code></li>
+</ul>
+<hr>
+<h3 id="required-headers">Required Headers</h3>
+<ul>
+<li><code>x-api-key: [API key provided by TransBnk after activation and IP whitelisting]</code></li>
+<li><code>Content-Type: application/json; charset=utf-8</code></li>
+</ul>
+<hr>
+<h3 id="request-body-format-for-electricity-bill-api">Request Body Format (for Electricity Bill API)</h3>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"id_number"</span>: <span class="hljs-string">"String"</span>,        <span class="hljs-comment">// CA number (Required)</span>
+  <span class="hljs-attr">"operator_code"</span>: <span class="hljs-string">"String"</span>     <span class="hljs-comment">// Operator code (Required)</span>
+}
+
+</div></code></pre>
+<hr>
+<h3 id="request-body-parameters">Request Body Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id_number</td>
+<td>Yes</td>
+<td>String</td>
+<td>CA number</td>
+</tr>
+<tr>
+<td>operator_code</td>
+<td>Yes</td>
+<td>String</td>
+<td>Operator code</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="7-response-structure">7. Response Structure</h2>
+<h3 id="response-format">Response Format</h3>
+<ul>
+<li><strong>Format</strong>: JSON</li>
+</ul>
+<hr>
+<h3 id="field-descriptions">Field Descriptions</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>client_id</td>
+<td>String</td>
+<td>Client ID</td>
+</tr>
+<tr>
+<td>customer_id</td>
+<td>String</td>
+<td>Customer ID</td>
+</tr>
+<tr>
+<td>operator_code</td>
+<td>String</td>
+<td>Operator code fetched from API</td>
+</tr>
+<tr>
+<td>state</td>
+<td>String</td>
+<td>State</td>
+</tr>
+<tr>
+<td>full_name</td>
+<td>String</td>
+<td>Customer's full name</td>
+</tr>
+<tr>
+<td>address</td>
+<td>String</td>
+<td>Customer's address</td>
+</tr>
+<tr>
+<td>mobile</td>
+<td>String</td>
+<td>Mobile number</td>
+</tr>
+<tr>
+<td>user_email</td>
+<td>String</td>
+<td>Email address</td>
+</tr>
+<tr>
+<td>bill_amount</td>
+<td>String</td>
+<td>Bill amount</td>
+</tr>
+<tr>
+<td>bill_number</td>
+<td>String</td>
+<td>Bill number</td>
+</tr>
+<tr>
+<td>document_link</td>
+<td>String</td>
+<td>Link to user document</td>
+</tr>
+<tr>
+<td>status_code</td>
+<td>Number</td>
+<td>HTTP status code</td>
+</tr>
+<tr>
+<td>success</td>
+<td>Boolean</td>
+<td>Indicates success or failure</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td>Response message</td>
+</tr>
+<tr>
+<td>message_code</td>
+<td>String</td>
+<td>Message code</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="example-response">Example Response</h3>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"data"</span>: {
+    <span class="hljs-attr">"client_id"</span>: <span class="hljs-string">"electricity_jBxiqjAGXuymlqlbrOOb"</span>,
+    <span class="hljs-attr">"customer_id"</span>: <span class="hljs-string">"17000346322745"</span>,
+    <span class="hljs-attr">"operator_code"</span>: <span class="hljs-string">"MH"</span>,
+    <span class="hljs-attr">"state"</span>: <span class="hljs-string">"maharashtra"</span>,
+    <span class="hljs-attr">"full_name"</span>: <span class="hljs-string">"SUKHWANI"</span>,
+    <span class="hljs-attr">"address"</span>: <span class="hljs-string">"COLONY SOLAPUR ROAD NR LAD GIRNI SHEWALWADI 412307"</span>,
+    <span class="hljs-attr">"mobile"</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">"user_email"</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">"bill_amount"</span>: <span class="hljs-string">"1,280.00"</span>,
+    <span class="hljs-attr">"bill_number"</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">"document_link"</span>: <span class="hljs-literal">null</span>
+  },
+  <span class="hljs-attr">"status_code"</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-attr">"success"</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Success"</span>,
+  <span class="hljs-attr">"message_code"</span>: <span class="hljs-string">"success"</span>
+}
+
+</div></code></pre>
+<hr>
+<h2 id="8-error-handling">8. Error Handling</h2>
+<h3 id="common-error-codes-and-messages">Common Error Codes and Messages</h3>
+<table>
+<thead>
+<tr>
+<th>HTTP Status Code</th>
+<th>Message</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>403</td>
+<td>{&quot;message&quot;: &quot;Forbidden&quot;}</td>
+<td>Missing or incorrect API key, or wrong HTTP method</td>
+</tr>
+<tr>
+<td>400</td>
+<td>{&quot;message&quot;: &quot;Invalid request body&quot;}</td>
+<td>Empty or incorrect request body sent</td>
+</tr>
+<tr>
+<td>401</td>
+<td>{&quot;Message&quot;: &quot;User: anonymous is not authorized to perform: execute-api:Invoke on resource…&quot;}</td>
+<td>IP not whitelisted</td>
+</tr>
+<tr>
+<td>504</td>
+<td>{&quot;message&quot;: &quot;Endpoint request timed out&quot;}</td>
+<td>Upstream service provider endpoint not responding</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="example-error-responses">Example Error Responses</h3>
+<p><strong>Missing or Incorrect API Key / Wrong Method</strong></p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Forbidden"</span>
+}
+</div></code></pre>
+<p><strong>Invalid Request Body</strong></p>
+<pre class="hljs"><code><div>
+{
+  <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Invalid request body"</span>
+}
+
+</div></code></pre>
+<p><strong>IP Not Whitelisted</strong></p>
+<pre class="hljs"><code><div>
+
+{
+  <span class="hljs-attr">"Message"</span>: <span class="hljs-string">"User: anonymous is not authorized to perform: execute-api:Invoke on resource…"</span>
+}
+</div></code></pre>
+<p><strong>Timeout</strong></p>
+<pre class="hljs"><code><div>
+
+{
+  <span class="hljs-attr">"message"</span>: <span class="hljs-string">"Endpoint request timed out"</span>
+}
+</div></code></pre>
+<hr>
+<h2 id="9-integration-flow-diagram">9. Integration Flow Diagram</h2>
+<p>v1/electric-bill-api-flow.png</p>
+<hr>
+<h2 id="10-pagination--filtering">10. Pagination &amp; Filtering</h2>
+<h3 id="handling-large-datasets">Handling Large Datasets</h3>
+<ul>
+<li><strong>Not applicable</strong> for this API as per the current specification.</li>
+<li>The API endpoints are designed to:
+<ul>
+<li>Fetch operator codes for states (small static dataset).</li>
+<li>Retrieve a single electricity bill based on CA number and operator code.</li>
+</ul>
+</li>
+<li><strong>Pagination and filtering are not supported</strong> in the current version.</li>
+</ul>
+<h3 id="recommendation">Recommendation</h3>
+<p>If future versions include bulk bill retrieval or large datasets:</p>
+<ul>
+<li>Implement query parameters such as:
+<ul>
+<li><code>page</code> (for page number)</li>
+<li><code>limit</code> (for number of records per page)</li>
+<li><code>filter</code> (for filtering by state, operator, etc.)</li>
+</ul>
+</li>
+<li>Ensure proper response metadata:
+<ul>
+<li><code>total_records</code></li>
+<li><code>current_page</code></li>
+<li><code>total_pages</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="11-versioning--changelog">11. Versioning &amp; Changelog</h2>
+<h3 id="current-version">Current Version</h3>
+<ul>
+<li><strong>Version:</strong> V1.0</li>
+<li><strong>Release Date:</strong> 13-May-2024</li>
+</ul>
+<hr>
+<h3 id="changes-from-previous-versions">Changes from Previous Versions</h3>
+<ul>
+<li><strong>First Release</strong>
+<ul>
+<li>Initial version of the TransBnk Electricity Bill API.</li>
+<li>Features included:
+<ul>
+<li><strong>Operator Code Fetch API</strong> (GET): Retrieve operator codes for states.</li>
+<li><strong>Electricity Bill API</strong> (POST): Fetch electricity bill details using CA number and operator code.</li>
+</ul>
+</li>
+<li>Security:
+<ul>
+<li>API Key-based authentication.</li>
+<li>IP whitelisting.</li>
+</ul>
+</li>
+<li>Response format: JSON.</li>
+<li>Error handling for invalid API key, request body, IP restrictions, and timeout.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="notes">Notes</h3>
+<ul>
+<li>No previous versions exist; this is the first official release.</li>
+</ul>
+<hr>
+<h2 id="12-best-practices">12. Best Practices</h2>
+<h3 id="retry-logic">Retry Logic</h3>
+<ul>
+<li>Implement <strong>exponential backoff</strong> for retries in case of transient errors (e.g., network issues or timeout).</li>
+<li>Avoid infinite retry loops; set a maximum retry limit (e.g., 3 attempts).</li>
+<li>Do not retry on client-side errors (4xx status codes like <code>403 Forbidden</code> or <code>400 Invalid request body</code>).</li>
+</ul>
+<hr>
+<h3 id="timeout-handling">Timeout Handling</h3>
+<ul>
+<li>Set a reasonable timeout for API requests (e.g., 30 seconds).</li>
+<li>Handle <code>504 Gateway Timeout</code> gracefully by:
+<ul>
+<li>Logging the error.</li>
+<li>Informing the user about the delay.</li>
+<li>Retrying after a short interval if appropriate.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="security-recommendations">Security Recommendations</h3>
+<ul>
+<li><strong>API Key Management</strong>:
+<ul>
+<li>Keep your API key confidential; never expose it in client-side code.</li>
+<li>Rotate API keys periodically.</li>
+</ul>
+</li>
+<li><strong>IP Whitelisting</strong>:
+<ul>
+<li>Ensure requests originate only from whitelisted IP addresses.</li>
+</ul>
+</li>
+<li><strong>Use HTTPS</strong>:
+<ul>
+<li>All API calls should use secure HTTPS endpoints.</li>
+</ul>
+</li>
+<li><strong>Validate Inputs</strong>:
+<ul>
+<li>Sanitize and validate CA numbers and operator codes before sending requests.</li>
+</ul>
+</li>
+<li><strong>Error Logging</strong>:
+<ul>
+<li>Log errors securely without exposing sensitive data.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="additional-tips">Additional Tips</h3>
+<ul>
+<li>Monitor API usage and set alerts for unusual activity.</li>
+<li>Implement rate limiting on your side to avoid overwhelming the API.</li>
+</ul>
+<hr>
+<h2 id="13-support--contact">13. Support &amp; Contact</h2>
+<h3 id="uat--prod-portal-links">UAT / PROD Portal Links</h3>
+<ul>
+<li><strong>UAT / Sandbox API Portal</strong>:<br>
+https://sandbox-api.trusthub.in</li>
+<li><strong>Production API Portal</strong>:<br>
+https://api.trusthub.in</li>
+</ul>
+<hr>
+<h3 id="support-contact">Support Contact</h3>
+<ul>
+<li><strong>Email</strong>: support@trusthub.in</li>
+<li><strong>Escalation Matrix</strong>:
+<ol>
+<li><strong>Level 1</strong>: API Integration Support Team<br>
+Email: support@trusthub.in</li>
+<li><strong>Level 2</strong>: Technical Escalation<br>
+Email: techlead@trusthub.in</li>
+<li><strong>Level 3</strong>: Account Manager<br>
+Contact via official TransBnk representative.</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="additional-resources">Additional Resources</h3>
+<ul>
+<li>API Documentation: Available on request from TransBnk.</li>
+<li>SLA &amp; Response Times: Contact support for details.</li>
+</ul>
+<hr>
+<h2 id="13-support--contact">13. Support &amp; Contact</h2>
+<h3 id="uat--prod-portal-links">UAT / PROD Portal Links</h3>
+<ul>
+<li><strong>UAT / Sandbox API Portal</strong>:<br>
+https://sandbox-api.trusthub.in</li>
+<li><strong>Production API Portal</strong>:<br>
+https://api.trusthub.in</li>
+</ul>
+<hr>
+<h3 id="support-contact">Support Contact</h3>
+<ul>
+<li><strong>Email</strong>: support@trusthub.in</li>
+<li><strong>Escalation Matrix</strong>:
+<ol>
+<li><strong>Level 1</strong>: API Integration Support Team<br>
+Email: support@trusthub.in</li>
+<li><strong>Level 2</strong>: Technical Escalation<br>
+Email: techlead@trusthub.in</li>
+<li><strong>Level 3</strong>: Account Manager<br>
+Contact via official TransBnk representative.</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="additional-resources">Additional Resources</h3>
+<ul>
+<li>API Documentation: Available on request from TransBnk.</li>
+<li>SLA &amp; Response Times: Contact support for details.</li>
+</ul>
+
+</body>
+</html>
