@@ -255,9 +255,6 @@ The **TransBnk Electricity Bill API** provides functionality for retrieving elec
 ---
 ## 9. Integration Flow Diagram 
 (Can be added)
-![Logo](C:/Users/sagar.hadkar/transbnk-docs/v1/electric-bill-api-flow.png)
-
-
 
 ---
 ## 10. Pagination & Filtering
